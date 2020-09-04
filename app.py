@@ -1,3 +1,4 @@
+#from logging import exception
 from flask import Flask, request
 import telegram
 import re
@@ -33,6 +34,7 @@ def respond():
     else:
         try:
             #TODO receive,send... emails
+            foo = ''
         except Exception:
             # if things went wrong
             bot.sendMessage(chat_id=chat_id, text="There was a problem in the name you used, please enter different name", reply_to_message_id=msg_id)
