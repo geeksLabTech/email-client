@@ -22,8 +22,7 @@ def recieve_mail(email_user, email_pwd):
         raw_email_string = raw_email.decode('utf-8')
 
         email_message = ''
-        email_message = email.message_from_string(raw_email_string)
-        # email_message = 
+        email_message = email.message_from_string(raw_email_string) 
 
         for response_part in data:
             if isinstance(response_part, tuple):
