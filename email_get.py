@@ -3,38 +3,45 @@ import email
 import imaplib
 import base64
 
-
-
-
 def recieve_mail(email_user, email_pwd):
-    mail = imaplib.IMAP4_SSL(host='correo.estudiantes.matcom.uh.cu', port=993)
-    mail.login(email_user, email_pwd)
+    mail = imaplib.IMAP4_SSL(host='correo.estudiantes.matcom.uh.cu', port=993)      #create conection with the imap server
+    mail.login(email_user, email_pwd)                                               #login with the username and password
 
-    mail.select('Inbox')
+    #TODO allow to select other folders 
+    mail.select('Inbox')                                                            #select all the inbox folder 
 
-    type, data = mail.search(None, 'ALL')
-    mail_ids = data[0]
-    id_list = mail_ids.split()
 
-    for num in data[0].split():
-        typ, data = mail.fetch(num, '(RFC822)')
-        raw_email = data[0][1]
-        raw_email_string = raw_email.decode('utf-8')
+    type, data = mail.search(None, 'ALL')                                           #select all mails in the inbox
+    
+    mail_ids = data[0]                                                              #get the list with the email ids
+    id_list = mail_ids.split()                                                  
+    msg_list = []
 
-        email_message = ''
-        email_message = email.message_from_string(raw_email_string) 
+    for num in id_list:                                                             #loop throw the emails
+        typ, data = mail.fetch(num, '(RFC822)')                                     #get the mail and decode it
+        
+        #TODO get the unread mails separately
+        for response_part in data:                                                  #loop throw the parts of the message          
+            if isinstance(response_part, tuple):                                    
+                msg = email.message_from_string(response_part[1].decode('utf-8'))   #get the message data and decode it
+                email_subject = msg['subject']                                      #extract email subject
+                email_from = msg['from']                                            #extract email sender
 
-        for response_part in data:
-            if isinstance(response_part, tuple):
-                msg = email.message_from_string(response_part[1].decode('utf-8'))
-                email_subject = msg['subject']
-                email_from = msg['from']
-
-                print('From: ' + email_from + '\n')
+                print('From: ' + email_from + '\n')                                 #output extracted Data to the console
                 print('Subject: ' + email_subject + '\n')
                 print(msg.get_payload(decode=True))
-
+                
+                msg_list.append((email_subject, email_from, msg.get_payload(decode=True))) #append the mail to a list with all the emails
+                
+    return msg_list
         #to download attachments
+
+        # raw_email = data[0][1]
+        # raw_email_string = raw_email.decode('utf-8')
+        #
+        # email_message = ''                                                      #
+        # email_message = email.message_from_string(raw_email_string) 
+        # 
         # for part in email_message.walk():
         #     if part.get_content_maintype() = 'multipart':
         #         continue
