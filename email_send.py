@@ -2,17 +2,13 @@ import email
 import smtplib
 
 
-def send_mail(sender, pwd, to):
+def send_mail(sender, pwd, to, subject, text):
     
-    smtpserver = smtplib.SMTP(host='smtp.estudiantes.matcom.uh.cu', port=965)
-    # print('here')
-    smtpserver.ehlo()
-    smtpserver.starttls()
+    smtpserver = smtplib.SMTP_SSL(host='smtp.estudiantes.matcom.uh.cu', port=465)
     smtpserver.ehlo()
     smtpserver.login(sender,pwd)
-    msg = 'Subject:probando script\n esto esta mandado con el script'#+subject+'\n'+text
+    msg = 'Subject:'+subject+'\n\n'+text
     smtpserver.sendmail(sender,to,msg)
     
-    print('Sent')
     smtpserver.close()
     
