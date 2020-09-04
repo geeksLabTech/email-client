@@ -1,6 +1,6 @@
 # Email Client 
 
-python email client for the MATCOM UH mail <\br>
+python email client for the MATCOM UH mail
 this allows to send and recieve emails withe the students account
 
 ## Installation 
