@@ -23,3 +23,8 @@ To check your inbox:</br>
 </br>and for a specific command help type:</br>
 
 `python3 main.py {command} --help`
+
+# Telegram Bot
+
+You can access our telegram bot at @experimental_email_bot (temporary name) on telegram
+
