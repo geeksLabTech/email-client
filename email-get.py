@@ -4,6 +4,7 @@ import imaplib
 import base64
 
 
+
 ## Credentials ################################################################
 email_user = input('Email: ') 
 email_pwd = input('Password: ') 
@@ -24,7 +25,7 @@ for num in data[0].split():
     raw_email_string = raw_email.decode('utf-8')
     
     email_message = ''
-    email_message = email.message_from_string(raw_email)
+    email_message = email.message_from_string(raw_email_string)
     # email_message = 
     
     for response_part in data:
