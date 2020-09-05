@@ -1,3 +1,5 @@
+## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+
 # Email Client 
 
 python email client for the MATCOM UH mail
