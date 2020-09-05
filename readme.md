@@ -4,8 +4,8 @@
 # Email Client 
 ==============
 
-python email client for the MATCOM UH mail
-this allows to send and recieve emails withe the students account
+python email client for any email server that supports imap and smtp,   
+using a telegram bot as interface
 
 ## Installation and Deployment
 ==============================
@@ -44,6 +44,19 @@ Now you are Ready to Deploy
 
 #### Deploy to heroku manually
 <!-- TODO Daniel write the steps to deploy on heroku -->
+
+### Email Servers Configuration
+====
+Finally to set up the bot and the server run: </br>
+
+`pyhton3 main.py setup_bot` 
+
+now you would be asked to input the bot token, name and url
+
+`pyhton3 main.py setup_email` 
+
+now you would be asked to input the email imap host and port as well as the smtp host and port
+now you are ready to use the service
 
 ## Usage 
 ========
