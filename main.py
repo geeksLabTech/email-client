@@ -1,6 +1,7 @@
 import typer
-from email_get import recieve_mail
-from email_send import send_mail
+from email_client.email_get import recieve_mail
+from email_client.email_send import send_mail
+import json
 
 
 # creating cli app
@@ -22,6 +23,24 @@ def send(sender, pwd, to, subject, text):
 def recieve(email_user, email_pwd):
     recieve_mail(email_user, email_pwd)
 
+@app.command(name='setup_mail', help='set up all the config files for the app')
+def setup_mail():
+    
+    # Get the config for the email server
+    config_file = {}
+    config_file['imap_host'] = input("Imap host: ")
+    config_file['imap_port'] = input("Imap port: ")
+    config_file['smtp_host'] = input("Smtp host: ")
+    config_file['smtp_port'] = input("Smtp port: ")
+    
+    # Export it to the config file
+    with open('./config/config_email.json', 'w') as json_file:
+        json.dump(config_file,json_file)
+        
+@app.command(name='setup_bot', help='set up all the config files for the telegram bot')
+def setup_bot():
+# TODO implement this
+    foo = ''
 
 # launch cli app
 if __name__ == '__main__':
