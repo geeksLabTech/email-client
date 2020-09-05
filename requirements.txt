@@ -2,3 +2,5 @@ Flask==1.1.1
 python_telegram_bot==12.6.1
 typer==0.3.2
 gunicorn==20.0.4
+coverage==5.2.1
+flake8==3.8.3
