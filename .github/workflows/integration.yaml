@@ -8,7 +8,7 @@ jobs:
         strategy:
             matrix:
                 python-version: [3.6,3.7,3.8]
-            # not sure of this...
+        
         runs-on: ubuntu-latest
         steps:
         - name: Checkout
@@ -23,14 +23,14 @@ jobs:
             pip install -r requirements.txt
             pip install black || true
         - name: Lint with flake8
-          shell: zsh #if this does not work use pwsh
+          shell: pwsh
           run: |
             flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
             flake8 . --count --exit-zero --max-complexity=10 --statistics
         - name: Test Python code with pytest
-          shell: zsh #pwsh
+          shell: pwsh 
           run: coverage run --source=. -m py.test
         - name: Upload coverage
-          shell: zsh #pwsh
+          shell: pwsh 
           run: coverage report -m
                   
