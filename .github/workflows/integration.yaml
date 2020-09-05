@@ -1,5 +1,7 @@
+
 name: integraton test
-on: [push, pull_request]
+
+on: [push,pull_request]
 
 jobs:
     build:
@@ -9,26 +11,21 @@ jobs:
             # not sure of this...
             runs-on: ['ubuntu-latest' , 'arch-latest', 'windows-latest', 'macos-latest']
             steps:
-                - name: Checkout
-                  uses: actions/checkout@v2
-                - name: Set Up Python ${{ matrix.python-version }}
-                  uses: actions/setup-python@v1
-                  with:
-                    python-version: ${{ matrix.python-version }}
-                - name Install Dependencies
-                  run: |
-                    python -m pip install --upgrade pip
-                    pip install -r requirements.txt
-                    pip install black || true
-                - name: Lint with flake8
-                  shell: zsh #if this does not work use pwsh
-                  run: |
-                    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-                    flake8 . --count --exit-zero --max-complexity=10 --statistics
-                - name: Test Python code with pytest
-                  shell: zsh #pwsh
-                  run: coverage run --source=. -m py.test
-                - name: Upload coverage
-                  shell: zsh #pwsh
-                  run: coverage report -m
-                  
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Set Up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v1
+              with:
+                python-version: ${{ matrix.python-version }}
+            - name: Install Dependencies
+              run: |
+                python -m pip install --upgrade pip
+                pip install -r requirements.txt
+                pip install black || true
+            #- name: Test Python code with pytest
+              #shell: zsh #pwsh
+              #run: coverage run --source=. -m py.test
+            - name: Upload coverage
+              shell: zsh #pwsh
+              run: coverage report -m
+              
