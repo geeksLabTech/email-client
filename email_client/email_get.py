@@ -1,13 +1,16 @@
 # import os
 import email
 import imaplib
+from tools.read_config import read_config
 # import base64
 
 # Very important Use "ISO-8859-1" as encoding method to avoid errors decoding the emais
 
 def recieve_mail(email_user, email_pwd):
+    # Read the email config file
+    config = read_config('./config/config_email.json')
     # create conection with the imap server
-    mail = imaplib.IMAP4_SSL(host='correo.estudiantes.matcom.uh.cu', port=993)      
+    mail = imaplib.IMAP4_SSL(host=config['imap_host'], port=config['imap_port'])      
     # login with the username and password
     mail.login(email_user, email_pwd)                                               
 
