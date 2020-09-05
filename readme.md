@@ -43,7 +43,21 @@ And then install the requirements
 Now you are Ready to Deploy
 
 #### Deploy to heroku manually
-<!-- TODO Daniel write the steps to deploy on heroku -->
+You must to create an account on heroku and download heroku cli from 
+https://devcenter.heroku.com/articles/heroku-cli
+
+Install heroku cli
+Now, open a terminal and execute the following commands:
+$ heroku login
+$ heroku create <name of your app>
+$ git add .
+$ git commit -m "first commit"
+$ git push heroku master
+$ heroku ps:scale web=1
+$ heroku open
+
+If you need more information of how to deploy a python app on heroku refer to link below: 
+https://devcenter.heroku.com/articles/getting-started-with-python?singlepage=true
 
 ## Usage 
 ========
