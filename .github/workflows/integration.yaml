@@ -22,10 +22,15 @@ jobs:
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
                 pip install black || true
-            #- name: Test Python code with pytest
-              #shell: zsh #pwsh
-              #run: coverage run --source=. -m py.test
+            - name: Lint with flake8
+              shell: zsh #if this does not work use pwsh
+              run: |
+                flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+                flake8 . --count --exit-zero --max-complexity=10 --statistics
+            - name: Test Python code with pytest
+              shell: zsh #pwsh
+              run: coverage run --source=. -m py.test
             - name: Upload coverage
               shell: zsh #pwsh
               run: coverage report -m
-              
+                  
