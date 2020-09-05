@@ -1,4 +1,5 @@
-## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+[![HitCount](http://hits.dwyl.com/Telegram-Mail/email-client.svg)](http://hits.dwyl.com/Telegram-Mail/email-client)
 
 # Email Client 
 ==============
