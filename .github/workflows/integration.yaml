@@ -9,7 +9,7 @@ jobs:
             matrix:
                 python-version: [3.5,3.6,3.7,3.8]
             # not sure of this...
-        runs-on: ['ubuntu-latest' , 'arch-latest', 'windows-latest', 'macos-latest']
+        runs-on: ubuntu-latest
         steps:
         - name: Checkout
           uses: actions/checkout@v2
