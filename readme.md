@@ -13,7 +13,7 @@ this allows to send and recieve emails withe the students account
 
 ### Docker Container
 
-The easyest method to deploy this software is using Docker,
+The easiest method to deploy this software is using Docker,
 Make sure you have <a href='https://docs.docker.com'>installed</a> Docker on your machine.</br>
 Then run the following command to build the container
 
