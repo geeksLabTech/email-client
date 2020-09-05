@@ -1,5 +1,5 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
-[![HitCount](http://hits.dwyl.com/Telegram-Mail/email-client.svg)](http://hits.dwyl.com/Telegram-Mail/email-client)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FJavierOramas%2FTelegram-Mail&count_bg=%233D91C8&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 # Email Client 
 ==============
@@ -13,7 +13,7 @@ using a telegram bot as interface
 
 ### Docker Container
 
-The easyest method to deploy this software is using Docker,
+The easiest method to deploy this software is using Docker,
 Make sure you have <a href='https://docs.docker.com'>installed</a> Docker on your machine.</br>
 Then run the following command to build the container
 
@@ -43,7 +43,27 @@ And then install the requirements
 Now you are Ready to Deploy
 
 #### Deploy to heroku manually
-<!-- TODO Daniel write the steps to deploy on heroku -->
+First approach:
+You must to create an account on heroku and download heroku cli from 
+https://devcenter.heroku.com/articles/heroku-cli
+
+Install heroku cli
+Now, open a terminal and execute the following commands:
+$ heroku login
+$ heroku create <name of your app>
+$ git add .
+$ git commit -m "first commit"
+$ git push heroku master
+$ heroku ps:scale web=1
+$ heroku open
+
+Second approach:
+If you have a Github account you can simply add a new app from heroku dashboard
+and connect to your Github repo.
+Now you can do automatically o manually deploys without the cli :)
+
+If you need more information of how to deploy a python app on heroku refer to link below: 
+https://devcenter.heroku.com/articles/getting-started-with-python?singlepage=true
 
 ### Email Servers Configuration
 ====
