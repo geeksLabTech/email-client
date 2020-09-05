@@ -3,6 +3,7 @@ import email
 import imaplib
 # import base64
 
+# Very important Use "ISO-8859-1" as encoding method to avoid errors decoding the emais
 
 def recieve_mail(email_user, email_pwd):
     # create conection with the imap server
@@ -31,7 +32,7 @@ def recieve_mail(email_user, email_pwd):
         for response_part in data:                                                  
             if isinstance(response_part, tuple):                                    
                 # get the message data and decode it
-                msg = email.message_from_string(response_part[1].decode('utf-8'))   
+                msg = email.message_from_string(response_part[1].decode("ISO-8859-1"))   
                 # extract email subject
                 email_subject = msg['subject']                                      
                 # extract email sender
@@ -48,7 +49,7 @@ def recieve_mail(email_user, email_pwd):
     return msg_list
 # to download attachments
 # raw_email = data[0][1]
-# raw_email_string = raw_email.decode('utf-8')
+# raw_email_string = raw_email.decode("ISO-8859-1")
 #
 # email_message = ''                                                      #
 # email_message = email.message_from_string(raw_email_string) 
