@@ -39,9 +39,16 @@ def setup_mail():
         
 @app.command(name='setup_bot', help='set up all the config files for the telegram bot')
 def setup_bot():
-# TODO implement this
-    foo = ''
-
+    
+    config_file = {}
+    
+    config_file['bot_token'] = input("Bot Token: ")
+    config_file['bot_user_name'] = input("Bot User Name: ")
+    config_file['URL'] = input("URL: ")
+    
+    with open('./config/config_bot.json', 'w') as json_file:
+        json.dump(config_file,json_file)
+        
 # launch cli app
 if __name__ == '__main__':
     app()

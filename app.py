@@ -1,12 +1,14 @@
 # from logging import exception
 from flask import Flask, request
 import telegram
+from tools.read_config import read_config
 # import re
-from telebot.credentials import URL, bot_user_name, bot_token
 global bot
 global TOKEN
 
-TOKEN = bot_token
+config = read_config('./config/config_bot.json')
+
+TOKEN = config['bot_token']
 bot = telegram.Bot(token=TOKEN)
 app = Flask(__name__)
 
@@ -44,7 +46,7 @@ def respond():
 
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
-    s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
+    s = bot.setWebhook('{URL}{HOOK}'.format(URL=config['URL'], HOOK=TOKEN))
     if s:
         return "webhook setup ok"
     else:
