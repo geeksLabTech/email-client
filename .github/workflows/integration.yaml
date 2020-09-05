@@ -23,9 +23,7 @@ jobs:
             pip install -r requirements.txt
             pip install black || true
         - name: Test Python code with pytest
-          shell: pwsh 
           run: coverage run --source=. -m py.test
         - name: Upload coverage
-          shell: pwsh 
           run: coverage report -m
                   
