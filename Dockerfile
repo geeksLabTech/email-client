@@ -6,3 +6,5 @@ RUN pip install -r requirements.txt
 
 COPY . /opt/Telegram_Bot
 ENTRYPOINT FLASK_APP=/opt/Telegram_Bot/app.py flask run
+
+# TODO steps to deploy on heroku
