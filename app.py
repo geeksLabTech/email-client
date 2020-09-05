@@ -33,7 +33,7 @@ def respond():
 
     else:
         try:
-            #TODO receive,send... emails
+            # TODO receive,send... emails
             foo = ''
         except Exception:
             # if things went wrong

@@ -22,4 +22,11 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r requirements.txt
             pip install black || true
-#TODO add coverage and flake8
+        - name: Test Python code with pytest
+          run: |
+            pip install pytest coverage
+            coverage run --source=. -m py.test
+        - name: Upload coverage
+          run: |
+            pip install pytest coverage
+            coverage report -m
