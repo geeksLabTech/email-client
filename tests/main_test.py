@@ -1,4 +1,5 @@
 from unittest import TestCase
+import coverage, flake8
 
 
 class TryTesting(TestCase):
