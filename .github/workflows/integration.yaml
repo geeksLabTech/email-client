@@ -1,0 +1,32 @@
+
+name: integraton test
+
+on: [push,pull_request]
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                python-version: [3.6,3.7,3.8]
+        
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Set Up Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v1
+          with:
+            python-version: ${{ matrix.python-version }}
+        - name: Install Dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install black || true
+        - name: Test Python code with pytest
+          run: |
+            pip install pytest coverage
+            coverage run --source=. -m py.test
+        - name: Upload coverage
+          run: |
+            pip install pytest coverage
+            coverage report -m
