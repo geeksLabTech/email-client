@@ -4,3 +4,6 @@ flake8==3.8.3
 coverage==5.2.1
 typer==0.3.2
 gunicorn == 20.0.4
+fastapi==0.61.1
+uvicorn==0.11.8
+flask==1.0.2
