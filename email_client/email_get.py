@@ -6,7 +6,7 @@ from tools.read_config import read_config
 
 # Very important Use "ISO-8859-1" as encoding method to avoid errors decoding the emais
 
-def recieve_mail(email_user, email_pwd):
+def recieve_mail(email_user, email_pwd, get_all=False):
     # Read the email config file
     config = read_config('./config/config_email.json')
     # create conection with the imap server
@@ -16,10 +16,13 @@ def recieve_mail(email_user, email_pwd):
 
     # TODO allow to select other folders 
     # select all the inbox folder 
-    mail.select('Inbox')                                                            
+    mail.select(readonly=1)                                                            
 
-    # select all mails in the inbox
-    type, data = mail.search(None, 'ALL')                                           
+    # select all mails in the inbox or the onread ones only
+    if not get_all:
+        type, data = mail.search(None, 'UNSEEN')                                           
+    else:    
+        type, data = mail.search(None, 'ALL')                                           
     
     # get the list with the email ids
     mail_ids = data[0]                                                              
@@ -41,6 +44,7 @@ def recieve_mail(email_user, email_pwd):
                 # extract email sender
                 email_from = msg['from']                                            
 
+                # typ, data = mail.store(num,'-FLAGS', '\\Seen')
                 # output extracted Data to the console
                 print('From: ' + email_from + '\n')                                 
                 print('Subject: ' + email_subject + '\n')
