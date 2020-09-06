@@ -52,6 +52,7 @@ def set_webhook():
 
         updater.bot.set_webhook(URL + TOKEN)
         updater.idle()
+        
         return "webhook setup ok"
 
     except Exception:
