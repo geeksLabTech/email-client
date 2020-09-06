@@ -13,7 +13,7 @@ app = client.run
 # def responder(client,message):
 #     message.reply_text("hello "+message.from_user.mention)
     
-@app.on_message(filters.command('recieve'))
+@client.on_message(filters.command('recieve'))
 def recieve_emails(client, message):
     
     # print(message)
