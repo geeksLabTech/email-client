@@ -1,4 +1,3 @@
-r
 import os
 from pyrogram import Client, filters
 from tools.read_config import read_config
