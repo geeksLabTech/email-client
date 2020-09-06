@@ -52,6 +52,8 @@ def recieve_mail(email_user, email_pwd, get_all=False):
                 
                 # append the mail to a list with all the emails
                 msg_list.append((email_subject, email_from, msg.get_payload(decode=True))) 
+                # TODO for debug reasons we are only sending back one email, remove before deploy
+                return msg_list
                 
     return msg_list
 # to download attachments
