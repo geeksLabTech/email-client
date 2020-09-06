@@ -1,1 +1,7 @@
-{"bot_token": "1327859600:AAEcVOeg_0uWbR29lPoLyRNX0LcHgqSKIsI", "bot_user_name": "experimental_email_bot", "URL": "https://intense-shelf-64505.herokuapp.com/"}
+{
+    "bot_token": "1327859600:AAEcVOeg_0uWbR29lPoLyRNX0LcHgqSKIsI", 
+    "bot_user_name": "experimental_email_bot", 
+    "URL": "https://intense-shelf-64505.herokuapp.com/",
+    "api_id": "1544166",
+    "api_hash": "521282daaa5c3ac51c0a737400773fcd"
+}
