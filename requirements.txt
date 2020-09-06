@@ -2,3 +2,4 @@ flake8==3.8.3
 Pyrogram==1.0.7
 coverage==5.2.1
 typer==0.3.2
+gunicorn == 20.0.4
