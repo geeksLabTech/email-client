@@ -1,12 +1,18 @@
 import os
+import pymongo
+
 from pyrogram import Client, filters
 from tools.read_config import read_config
 
 from email_client.email_send import send_mail
 from email_client.email_get import recieve_mail
 
+from model.db import create_connection
+
 config_data = read_config('./config/config_bot.json')
 app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'])
+db = create_connection()
+table = db.users.users
 
  
 @app.on_message(filters.command('recieve'))
@@ -40,9 +46,20 @@ def send_email(client,message):
     message.reply_text('Sent!')
     
 @app.on_message(filters.command('version'))
-def recieve_emails(client, message):
-    message.reply_text('V-0.1') 
+def get_version(client, message):
+    message.reply_text('V-0.2') 
 
+@app.on_message(filters.command('register'))
+def register_user(identifier, email, password):
+    
+    #TODO Encript email and password
+    userinfo = {}
+    userinfo['identifier'] = identifier
+    userinfo['email'] = email
+    userinfo['password'] = password
+    
+    result = table.insert_one(userinfo)
+    
 if __name__ == '__main__':
     app.run()
     # main()

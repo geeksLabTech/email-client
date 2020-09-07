@@ -24,11 +24,22 @@ if this process ends with no errors you should be able to run the container
 
 ### Manual Install and Deploy
 
+
 First of all make sure that your system is up to Date
 
 (Ubuntu) `sudo apt-get update && sudo apt-get upgrade`
 
 (Arch) `sudo pacman -Syu`
+
+Install Mongodb for users handle
+(Ubuntu) `sudo apt-get install mongodb`
+
+(Arch) `sudo pacman -S mongodb`
+
+Set MongoDB daemon to run at startup:
+
+`sudo systemctl enable mongod`
+`sudo systemctl start mongod`
 
 Then make sure that python3 is installed and in the latest version (3.8 at hte time of writting)
 (Ubuntu) `sudo apt-get install python3`
@@ -37,8 +48,6 @@ Then make sure that python3 is installed and in the latest version (3.8 at hte t
 
 Now install pip
 (Ubuntu) `python3 -m pip install --upgrade pip`
-
-(Arch) `python3 -m pip install --upgrade pip`
 
 And then install the requirements
 
