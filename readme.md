@@ -121,3 +121,17 @@ To check your inbox:</br>
 
 You can access our telegram bot at @experimental_email_bot (temporary name) on telegram
 
+## Commands
+
+### Register
+in order to use the bot you need to register on the db, to do it, sent the bot the following info:</br>
+`/register <email> <password>`
+this will register email and password encripted on the db
+
+### Recieve
+to recieve unread emails just type:</br>
+`/recieve`
+
+### Send
+to send an email type:</br>
+`/send <reciever email> <subject> <body>`
