@@ -52,10 +52,11 @@ def setup_bot():
 
 @app.command(name='setup_key', help='create a random key for the db encryption')
 def setup_key():    
-    with open('./config/encrypt.key', 'wb') as f
+    with open('./config/encrypt.key', 'wb') as f:
         f.write(Fernet.generate_key())
 
 
 # launch cli app
 if __name__ == '__main__':
     app()
+

@@ -20,7 +20,7 @@ table = db.users.users
 
 def get_fernet():
     key = ''
-    with open('./config/encrypt.key', 'r') as f
+    with open('./config/encrypt.key', 'r') as f:
         key = f.readline()
     f = Fernet(key)
     return f
