@@ -86,6 +86,7 @@ Now you can do automatically o manually deploys without the cli :)
 
 If you need more information of how to deploy a python app on heroku refer to <a href='https://devcenter.heroku.com/articles/getting-started-with-python?singlepage=true'>this page</a>
 
+
 ### Email Servers Configuration
 
 Finally to set up the bot and the server run: </br>
@@ -98,6 +99,12 @@ now you would be asked to input the bot token, name and url
 
 now you would be asked to input the email imap host and port as well as the smtp host and port
 now you are ready to use the service
+
+### Generate encryption key
+Generate encryption key for the database, its very important that you keep this, if this key
+gets lost you wont be able to decrypt the data</br>
+`pyhton3 main.py setup_key` 
+
 
 ## Usage 
 
