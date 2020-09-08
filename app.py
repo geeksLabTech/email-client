@@ -10,11 +10,20 @@ from email_client.email_get import recieve_mail
 
 from model.db import create_connection
 
+from cryptography.fernet import Fernet
+# import base64
+
 config_data = read_config('./config/config_bot.json')
 app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'])
 db = create_connection()
 table = db.users.users
 
+def get_fernet():
+    key = ''
+    with open('./config/encrypt.key', 'r') as f
+        key = f.readline()
+    f = Fernet(key)
+    return f
  
 @app.on_message(filters.command('recieve'))
 def recieve_emails(client, message):
@@ -24,38 +33,42 @@ def recieve_emails(client, message):
     
     message.reply_text('getting emails') 
     
-    # user = db_user['email'] 
-    # pwd = db_user['password']
+    f = get_fernet()
     
-    texts = message.text.split(" ")
-    user = texts[1]
-    pwd = texts[2]
+    user = f.decrypt(db_user['email']).decode()
+    pwd = f.decrypt(db_user['password']).decode()
+    
+    
     emails = recieve_mail(user,pwd)
     for i in emails:
         message.reply_text(i)
 
-# TODO make this to work with diferent messages, 
-# /send triggers the action and then it asks for credentials (or get them from the stored date)
+# TODO make this (send) to work with diferent messages, 
+# /send triggers the action and 
 # then it asks for the email of the reciever
 # then the subject and finally the body of the email 
 
 @app.on_message(filters.command('send'))
 def send_email(client,message):
     
-    #extract identifier form this
-    # db_user = search_user(client, table)
+    # extract identifier form message (chat_id)
+    db_user = search_user(message.chat.id, table)
 
+    # get encryption/decryption tool load the key
+    f = get_fernet()
+    
+    # get the email and password and decrypt it
+    user = f.decrypt(db_user['email']).decode()
+    pwd = f.decrypt(db_user['password']).decode()
+
+    # get reciever email, subject and text for the email
     texts = message.text.split(" ")
 
-    # user = db_user['email'] 
-    # pwd = db_user['password']
-
-    user = text[1]
-    pwd = texts[2]
-    to = texts[3]
-    subject = texts[4]
-    body = texts[5]
+    to = texts[1]
+    subject = texts[2]
+    body = texts[3]
     
+    # send message and tell the user that the email is sent
     send_mail(user,pwd,to,subject, body)    
     message.reply_text('Sent!')
     
@@ -65,12 +78,18 @@ def get_version(client, message):
 
 @app.on_message(filters.command('register'))
 def register_user(client, message):
-     
-    #TODO Encript email and password
+    
+    texts = message.text.split(" ")
+    user = text[1]
+    pwd = texts[2]
+    
     userinfo = {}
-    userinfo['identifier'] = identifier
-    userinfo['email'] = email
-    userinfo['password'] = password
+    
+    f = get_fernet()
+    
+    userinfo['identifier'] = message.chat.id
+    userinfo['email'] = f.encrypt(email.encode())
+    userinfo['password'] = f.encrypt(password.encode())
     
     result = table.insert_one(userinfo)
     
