@@ -14,7 +14,6 @@ def recieve_mail(email_user, email_pwd, get_all=False):
     # login with the username and password
     mail.login(email_user, email_pwd)                                               
 
-    # TODO allow to select other folders 
     # select all the inbox folder 
     mail.select(readonly=1)                                                            
 
@@ -33,7 +32,6 @@ def recieve_mail(email_user, email_pwd, get_all=False):
     for num in id_list:                                                             
         # get the mail and decode it
         typ, data = mail.fetch(num, '(RFC822)')                                             
-        # TODO get the unread mails separately
         # loop throw the parts of the message          
         for response_part in data:                                                  
             if isinstance(response_part, tuple):                                    
@@ -52,9 +50,7 @@ def recieve_mail(email_user, email_pwd, get_all=False):
                 
                 # append the mail to a list with all the emails
                 msg_list.append((email_subject, email_from, msg.get_payload(decode=True))) 
-                # TODO for debug reasons we are only sending back one email, remove before deploy
-                return msg_list
-                
+
     return msg_list
 # to download attachments
 # raw_email = data[0][1]
