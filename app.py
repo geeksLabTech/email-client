@@ -3,6 +3,7 @@ import pymongo
 
 from pyrogram import Client, filters
 from tools.read_config import read_config
+from tools.db_tools import  search_user
 
 from email_client.email_send import send_mail
 from email_client.email_get import recieve_mail
@@ -18,7 +19,13 @@ table = db.users.users
 @app.on_message(filters.command('recieve'))
 def recieve_emails(client, message):
     
+    #extract identifier form client or message
+    # db_user = search_user(client, table)
+    
     message.reply_text('getting emails') 
+    
+    # user = db_user['email'] 
+    # pwd = db_user['password']
     
     texts = message.text.split(" ")
     user = texts[1]
@@ -35,8 +42,15 @@ def recieve_emails(client, message):
 @app.on_message(filters.command('send'))
 def send_email(client,message):
     
+    #extract identifier form this
+    # db_user = search_user(client, table)
+
     texts = message.text.split(" ")
-    user = texts[1]
+
+    # user = db_user['email'] 
+    # pwd = db_user['password']
+
+    user = text[1]
     pwd = texts[2]
     to = texts[3]
     subject = texts[4]
@@ -50,8 +64,8 @@ def get_version(client, message):
     message.reply_text('V-0.2') 
 
 @app.on_message(filters.command('register'))
-def register_user(identifier, email, password):
-    
+def register_user(client, message):
+     
     #TODO Encript email and password
     userinfo = {}
     userinfo['identifier'] = identifier
