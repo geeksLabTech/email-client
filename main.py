@@ -2,7 +2,8 @@ import typer
 from email_client.email_get import recieve_mail
 from email_client.email_send import send_mail
 import json
-
+# from os import urandom
+from cryptography.fernet import Fernet
 
 # creating cli app
 app = typer.Typer()
@@ -48,7 +49,14 @@ def setup_bot():
     
     with open('./config/config_bot.json', 'w') as json_file:
         json.dump(config_file,json_file)
-        
+
+@app.command(name='setup_key', help='create a random key for the db encryption')
+def setup_key():    
+    with open('./config/encrypt.key', 'wb') as f:
+        f.write(Fernet.generate_key())
+
+
 # launch cli app
 if __name__ == '__main__':
     app()
+
