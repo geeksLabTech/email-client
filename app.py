@@ -13,8 +13,8 @@ from model.db import create_connection
 from cryptography.fernet import Fernet
 # import base64
 
-
 config_data = read_config('./config/config_bot.json')
+
 app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'])
 db = create_connection()
 table = db.users.users
@@ -34,7 +34,7 @@ def recieve_emails(client, message):
     
     #extract identifier form client or message
     db_user = search_user(message.chat.id, db.users.users)[0]
-    
+
     message.reply_text('getting emails') 
     
     f = get_fernet()
@@ -62,7 +62,7 @@ def send_email(client,message):
     f = get_fernet()
     
     # get the email and password and decrypt it
-    user = f.decrypt(db_user['email']).decode()
+    user = f.decrypt().decode()
     pwd = f.decrypt(db_user['password']).decode()
 
     # get reciever email, subject and text for the email
