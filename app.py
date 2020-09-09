@@ -14,6 +14,7 @@ from cryptography.fernet import Fernet
 # import base64
 
 config_data = read_config('./config/config_bot.json')
+
 app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'])
 db = create_connection()
 table = db.users.users
@@ -94,6 +95,6 @@ def register_user(client, message):
     result = table.insert_one(userinfo)
     
 if __name__ == '__main__':
-    app.run()
+    app()
     # main()
 
