@@ -59,7 +59,7 @@ def send_email(client,message):
     f = get_fernet()
     
     # get the email and password and decrypt it
-    user = f.decrypt(db_user['email']).decode()
+    user = f.decrypt().decode()
     pwd = f.decrypt(db_user['password']).decode()
 
     # get reciever email, subject and text for the email
@@ -81,8 +81,8 @@ def get_version(client, message):
 def register_user(client, message):
     
     texts = message.text.split(" ")
-    user = text[1]
-    pwd = texts[2]
+    email = texts[1]
+    password = texts[2]
     
     userinfo = {}
     
