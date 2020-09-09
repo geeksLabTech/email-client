@@ -30,7 +30,7 @@ def get_fernet():
 def recieve_emails(client, message):
     
     #extract identifier form client or message
-    # db_user = search_user(client, table)
+    db_user = search_user(message.chat.id, table)
     
     message.reply_text('getting emails') 
     
