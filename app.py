@@ -13,10 +13,13 @@ from model.db import create_connection
 from cryptography.fernet import Fernet
 # import base64
 
+
 config_data = read_config('./config/config_bot.json')
 app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'])
 db = create_connection()
 table = db.users.users
+
+# app = appl.run()
 
 def get_fernet():
     key = ''
@@ -29,12 +32,12 @@ def get_fernet():
 def recieve_emails(client, message):
     
     #extract identifier form client or message
-    # db_user = search_user(client, table)
+    db_user = search_user(message.chat.id, db.users.users)[0]
     
     message.reply_text('getting emails') 
     
     f = get_fernet()
-    
+    print(db_user)
     user = f.decrypt(db_user['email']).decode()
     pwd = f.decrypt(db_user['password']).decode()
     
@@ -52,7 +55,7 @@ def recieve_emails(client, message):
 def send_email(client,message):
     
     # extract identifier form message (chat_id)
-    db_user = search_user(message.chat.id, table)
+    db_user = search_user(message.chat.id, table)[0]
 
     # get encryption/decryption tool load the key
     f = get_fernet()
@@ -80,8 +83,8 @@ def get_version(client, message):
 def register_user(client, message):
     
     texts = message.text.split(" ")
-    user = text[1]
-    pwd = texts[2]
+    email = texts[1]
+    password = texts[2]
     
     userinfo = {}
     
@@ -92,6 +95,8 @@ def register_user(client, message):
     userinfo['password'] = f.encrypt(password.encode())
     
     result = table.insert_one(userinfo)
+    message.reply_text('Registered!') 
+    
     
 if __name__ == '__main__':
     app.run()
