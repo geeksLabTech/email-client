@@ -2,13 +2,16 @@ import os
 import pymongo
 
 from pyrogram import Client, filters
+from pyrogram.methods import password
+from pyrogram.types import Message, User, Chat
+from pyrogram.types.user_and_chats import chat
 from tools.read_config import read_config
 from tools.db_tools import  search_user
 
 from email_client.email_send import send_mail
 from email_client.email_get import recieve_mail
 
-from model.db import create_connection
+from model.db import *
 
 from cryptography.fernet import Fernet
 # import base64
@@ -16,10 +19,7 @@ from cryptography.fernet import Fernet
 config_data = read_config('./config/config_bot.json')
 
 app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'])
-db = create_connection()
-table = db.users.users
-
-# app = appl.run()
+create_db_connection('users_db')
 
 def get_fernet():
     key = ''
@@ -29,21 +29,22 @@ def get_fernet():
     return f
  
 @app.on_message(filters.command('recieve'))
-
-def recieve_emails(client, message):
+def recieve_emails(client, message: Message):
     
     #extract identifier form client or message
-    db_user = search_user(message.chat.id, db.users.users)[0]
-
+    # db_user = search_user(client, table)
+    
     message.reply_text('getting emails') 
     
     f = get_fernet()
-    print(db_user)
-    user = f.decrypt(db_user['email']).decode()
-    pwd = f.decrypt(db_user['password']).decode()
+    
+    user = UserDb.objects.get(chat_id=message.chat.id)
+
+    username = f.decrypt(user.username).decode()
+    password = f.decrypt(user.password).decode()
     
     
-    emails = recieve_mail(user,pwd)
+    emails = recieve_mail(username, password)
     for i in emails:
         message.reply_text(i)
 
@@ -53,17 +54,17 @@ def recieve_emails(client, message):
 # then the subject and finally the body of the email 
 
 @app.on_message(filters.command('send'))
-def send_email(client,message):
+def send_email(client,message: Message):
     
-    # extract identifier form message (chat_id)
-    db_user = search_user(message.chat.id, table)[0]
+    # extract identifier fromm message (chat_id)
+    user = UserDb.objects.get(chat_id=message.chat.id)
 
     # get encryption/decryption tool load the key
     f = get_fernet()
     
     # get the email and password and decrypt it
-    user = f.decrypt().decode()
-    pwd = f.decrypt(db_user['password']).decode()
+    username = f.decrypt(user.username).decode()
+    password = f.decrypt(user.password).decode()
 
     # get reciever email, subject and text for the email
     texts = message.text.split(" ")
@@ -73,33 +74,40 @@ def send_email(client,message):
     body = texts[3]
     
     # send message and tell the user that the email is sent
-    send_mail(user,pwd,to,subject, body)    
+    send_mail(username, password, to, subject, body)    
     message.reply_text('Sent!')
     
 @app.on_message(filters.command('version'))
-def get_version(client, message):
+def get_version(client, message: Message):
     message.reply_text('V-0.2') 
 
 @app.on_message(filters.command('register'))
-def register_user(client, message):
+def register_user(client, message: Message):
     
     texts = message.text.split(" ")
-    email = texts[1]
+    username = texts[1]
     password = texts[2]
-    
-    userinfo = {}
-    
+    chat_id = message.chat.id
+
     f = get_fernet()
+
+    encrypted_username = f.encrypt(username.encode())
+    encrypted_password = f.encrypt(password.encode())   
+
+    user = UserDb(
+        chat_id=chat_id,
+        username=encrypted_username, 
+        password=encrypted_password
+    )
     
-    userinfo['identifier'] = message.chat.id
-    userinfo['email'] = f.encrypt(email.encode())
-    userinfo['password'] = f.encrypt(password.encode())
+    user.save()
+    #userinfo['identifier'] = message.chat.id
+    #userinfo['email'] = f.encrypt(email.encode())
+    #userinfo['password'] = f.encrypt(password.encode())
     
-    result = table.insert_one(userinfo)
-    message.reply_text('Registered!') 
-    
+    #result = table.insert_one(userinfo)
     
 if __name__ == '__main__':
-    app()
+    app.run()
     # main()
 
