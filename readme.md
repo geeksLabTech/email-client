@@ -41,7 +41,7 @@ Set MongoDB daemon to run at startup:
 `sudo systemctl enable mongod`
 `sudo systemctl start mongod`
 
-Then make sure that python3 is installed and in the latest version (3.8 at hte time of writting)
+Then make sure that python3 is installed and in the latest version (3.8 at the time of writting)
 (Ubuntu) `sudo apt-get install python3`
 
 (Arch) `sudo pacman -S python3`

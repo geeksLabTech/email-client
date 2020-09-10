@@ -19,6 +19,8 @@ app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['a
 db = create_connection()
 table = db.users.users
 
+# app = appl.run()
+
 def get_fernet():
     key = ''
     with open('./config/encrypt.key', 'r') as f:
@@ -27,15 +29,16 @@ def get_fernet():
     return f
  
 @app.on_message(filters.command('recieve'))
+
 def recieve_emails(client, message):
     
     #extract identifier form client or message
-    db_user = search_user(message.chat.id, table)
-    
+    db_user = search_user(message.chat.id, db.users.users)[0]
+
     message.reply_text('getting emails') 
     
     f = get_fernet()
-    
+    print(db_user)
     user = f.decrypt(db_user['email']).decode()
     pwd = f.decrypt(db_user['password']).decode()
     
@@ -53,7 +56,7 @@ def recieve_emails(client, message):
 def send_email(client,message):
     
     # extract identifier form message (chat_id)
-    db_user = search_user(message.chat.id, table)
+    db_user = search_user(message.chat.id, table)[0]
 
     # get encryption/decryption tool load the key
     f = get_fernet()
@@ -93,6 +96,8 @@ def register_user(client, message):
     userinfo['password'] = f.encrypt(password.encode())
     
     result = table.insert_one(userinfo)
+    message.reply_text('Registered!') 
+    
     
 if __name__ == '__main__':
     app()
