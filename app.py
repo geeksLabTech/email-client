@@ -90,7 +90,7 @@ def send_email(client,message: Message):
 
         # get reciever email, subject and text for the email
         texts = message.text.split(" ")
-        if(len(texts) != 3):
+        if(len(texts) < 3):
             message.reply_text(
                 '''
                 La estructura debe ser la siguiente:
@@ -102,7 +102,10 @@ def send_email(client,message: Message):
         else:
             to = texts[1]
             subject = texts[2]
-            body = texts[3]
+            
+            body = ' '
+            for i in texts[3:]:
+                body = body+i+' '
     
             # send message and tell the user that the email is sent
             try:
@@ -125,23 +128,28 @@ def register_user(client, message: Message):
     
     texts = message.text.split(" ")
     if(len(texts) != 3):
-        message.reply_text('El usuario y contraseña deben estar separados por un espacio')
+        message.reply_text('Debe Introducir los campos usuario y contraseña separados por un espacio')
     
     else:
         username = texts[1]
         password = texts[2]
         chat_id = message.chat.id
-
+        
         f = get_fernet()
     
         encrypted_username = f.encrypt(username.encode())
         encrypted_password = f.encrypt(password.encode())   
 
-        user = UserDb(
-            chat_id=chat_id,
-            username=encrypted_username, 
-            password=encrypted_password
-        )
+        try:
+            user = UserDb.objects.get(chat_id=message.chat.id)
+            user.username = encrypted_username
+            user.password = encrypted_password
+        except: 
+            user = UserDb(
+                chat_id=chat_id,
+                username=encrypted_username, 
+                password=encrypted_password
+            )
     
         user.save()
     
