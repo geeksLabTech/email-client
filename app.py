@@ -1,12 +1,10 @@
-import os
-import pymongo
 
+from tools.errors import LoginException
 from pyrogram import Client, filters
 from pyrogram.methods import password
-from pyrogram.types import Message, User, Chat
+from pyrogram.types import Message
 from pyrogram.types.user_and_chats import chat
 from tools.read_config import read_config
-from tools.db_tools import  search_user
 
 from email_client.email_send import send_mail
 from email_client.email_get import recieve_mail
@@ -31,22 +29,36 @@ def get_fernet():
 @app.on_message(filters.command('recieve'))
 def recieve_emails(client, message: Message):
     
-    #extract identifier form client or message
-    # db_user = search_user(client, table)
-    
     message.reply_text('getting emails') 
     
     f = get_fernet()
     
-    user = UserDb.objects.get(chat_id=message.chat.id)
-
-    username = f.decrypt(user.username).decode()
-    password = f.decrypt(user.password).decode()
+    try:
+        user = UserDb.objects.get(chat_id=message.chat.id)
+    except DoesNotExist:
+        message.reply_text(
+            '''
+            Debe registrarse primero, por favor
+            use el comando /register y escriba
+            su nombre de usuario y contraseña
+            separados por un espacio.
+            '''
+        )
+    else:
+        username = f.decrypt(user.username).decode()
+        password = f.decrypt(user.password).decode()
     
-    
-    emails = recieve_mail(username, password)
-    for i in emails:
-        message.reply_text(i)
+        try:
+            emails = recieve_mail(username, password)
+        except LoginException:
+            message.reply_text('Error al loguearse, quizas deba cambiar su usuario o contraseña')
+        except Exception as e:
+            message.reply_text(str(e) + 
+            ' Por favor reporte este error al equipo de desarrollo :)'
+            )
+        else:
+            for i in emails:
+                message.reply_text(i)
 
 # TODO make this (send) to work with diferent messages, 
 # /send triggers the action and 
@@ -57,28 +69,52 @@ def recieve_emails(client, message: Message):
 def send_email(client,message: Message):
     
     # extract identifier fromm message (chat_id)
-    user = UserDb.objects.get(chat_id=message.chat.id)
-
-    # get encryption/decryption tool load the key
-    f = get_fernet()
+    try:
+        user = UserDb.objects.get(chat_id=message.chat.id)
+    except DoesNotExist:
+        message.reply_text(
+            '''
+            Debe registrarse primero, por favor
+            use el comando /register y escriba
+            su nombre de usuario y contraseña
+            separados por un espacio.
+            '''
+        )
+    else:
+        # get encryption/decryption tool load the key
+        f = get_fernet()
     
-    # get the email and password and decrypt it
-    username = f.decrypt(user.username).decode()
-    password = f.decrypt(user.password).decode()
+        # get the email and password and decrypt it
+        username = f.decrypt(user.username).decode()
+        password = f.decrypt(user.password).decode()
 
-    # get reciever email, subject and text for the email
-    texts = message.text.split(" ")
-
-    to = texts[1]
-    subject = texts[2]
+        # get reciever email, subject and text for the email
+        texts = message.text.split(" ")
+        if(len(texts) != 3):
+            message.reply_text(
+                '''
+                La estructura debe ser la siguiente:
+                    *Destinatario
+                    *Asunto
+                    *Cuerpo
+                '''
+            )
+        else:
+            to = texts[1]
+            subject = texts[2]
+            body = texts[3]
     
-    body = ''
-    for i in texts[3:]:
-        body = body+i+' '
-    
-    # send message and tell the user that the email is sent
-    send_mail(username, password, to, subject, body)    
-    message.reply_text('Sent!')
+            # send message and tell the user that the email is sent
+            try:
+                send_mail(username, password, to, subject, body)  
+            except LoginException:
+                message.reply_text('Error al loguearse, quizas deba cambiar su usuario o contraseña')
+            except Exception as e:
+                message.reply_text(str(e) + 
+                ' Por favor reporte este error al equipo de desarrollo :)'
+                )  
+            else: 
+                message.reply_text('Sent!')
     
 @app.on_message(filters.command('version'))
 def get_version(client, message: Message):
@@ -88,39 +124,29 @@ def get_version(client, message: Message):
 def register_user(client, message: Message):
     
     texts = message.text.split(" ")
-    username = texts[1]
-    password = texts[2]
-    chat_id = message.chat.id
-
-    f = get_fernet()
-
-    encrypted_username = f.encrypt(username.encode())
-    encrypted_password = f.encrypt(password.encode())   
-
-    user = UserDb(
-        chat_id=chat_id,
-        username=encrypted_username, 
-        password=encrypted_password
-    )
+    if(len(texts) != 3):
+        message.reply_text('El usuario y contraseña deben estar separados por un espacio')
     
-    user.save()
-@app.on_message(filters.command('logout'))
-def register_user(client, message: Message):
-    user = UserDb.objects.get(chat_id=message.chat.id)
-    user.delete()
-    message.reply_text('logued out') 
+    else:
+        username = texts[1]
+        password = texts[2]
+        chat_id = message.chat.id
+
+        f = get_fernet()
     
-@app.on_message(filters.command('help'))
-@app.on_message(filters.command('start'))
-def register_user(client, message: Message):
-    message.reply_text('''/register <email> <password> : register your email and password \n 
-                          /logout : if you are logued in, it removes your email and password from the database  
-                          /recieve : if you are registered this will send you your latest emails (unread)
-                          /send <email> <subject> <body> : send to <email> a mail with the subject <subject> and with <body> as the text
-                          /version : tells you the current vesion of the bot (debug purposes)  
-                       ''')
+        encrypted_username = f.encrypt(username.encode())
+        encrypted_password = f.encrypt(password.encode())   
+
+        user = UserDb(
+            chat_id=chat_id,
+            username=encrypted_username, 
+            password=encrypted_password
+        )
+    
+        user.save()
+    
     
 if __name__ == '__main__':
     app.run()
-    # main()
+    
 

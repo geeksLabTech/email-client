@@ -1,6 +1,7 @@
 # import os
 import email
 import imaplib
+from tools.errors import LoginException
 from tools.read_config import read_config
 # import base64
 
@@ -12,8 +13,11 @@ def recieve_mail(email_user, email_pwd, get_all=False):
     # create conection with the imap server
     mail = imaplib.IMAP4_SSL(host=config['imap_host'], port=config['imap_port'])      
     # login with the username and password
-    mail.login(email_user, email_pwd)                                               
-
+    try:
+        mail.login(email_user, email_pwd)                                               
+    except:
+        raise LoginException
+    
     # TODO allow to select other folders 
     # select all the inbox folder 
     mail.select(readonly=True)                                                            
