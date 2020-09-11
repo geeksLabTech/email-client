@@ -101,6 +101,12 @@ def register_user(client, message: Message):
     )
     
     user.save()
+@app.on_message(filters.command('logout'))
+def register_user(client, message: Message):
+    user = UserDb.objects.get(chat_id=message.chat.id)
+    user.delete()
+    message.reply_text('logued out') 
+    
     #userinfo['identifier'] = message.chat.id
     #userinfo['email'] = f.encrypt(email.encode())
     #userinfo['password'] = f.encrypt(password.encode())

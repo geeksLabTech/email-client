@@ -8,8 +8,8 @@ def create_db_connection(db_name:str, host:str = 'localhost', port:int = 27017):
 
 class UserDb(Document):
     chat_id  = IntField(unique=True)
-    username = StringField()
-    password = StringField()
+    username = BinaryField()
+    password = BinaryField()
 
 
 
