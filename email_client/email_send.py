@@ -3,7 +3,7 @@ from tools.errors import LoginException
 from tools.read_config import read_config
 
 
-def send_mail(sender, pwd, to, subject, text):
+def send_mail(sender:str, pwd:str, to:str, subject:str, text:str):
     # Read the email config file
     config = read_config('./config/config_email.json')
     # create connection with the smtp server

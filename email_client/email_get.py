@@ -7,7 +7,7 @@ from tools.read_config import read_config
 
 # Very important Use "ISO-8859-1" as encoding method to avoid errors decoding the emais
 
-def recieve_mail(email_user, email_pwd, get_all=False):
+def recieve_mail(email_user:str, email_pwd:str, get_all: bool=False):
     # Read the email config file
     config = read_config('./config/config_email.json')
     # create conection with the imap server
@@ -17,47 +17,47 @@ def recieve_mail(email_user, email_pwd, get_all=False):
         mail.login(email_user, email_pwd)                                               
     except:
         raise LoginException
+    else:
+        # TODO allow to select other folders 
+        # select all the inbox folder 
+        mail.select(readonly=True)                                                            
+
+        # select all mails in the inbox or the onread ones only
+        if not get_all:
+            type, data = mail.search(None, 'UNSEEN')                                           
+        else:    
+            type, data = mail.search(None, 'ALL')                                           
     
-    # TODO allow to select other folders 
-    # select all the inbox folder 
-    mail.select(readonly=True)                                                            
+        # get the list with the email ids
+        mail_ids = data[0]                                                              
+        id_list = mail_ids.split()                                                  
+        msg_list = []
 
-    # select all mails in the inbox or the onread ones only
-    if not get_all:
-        type, data = mail.search(None, 'UNSEEN')                                           
-    else:    
-        type, data = mail.search(None, 'ALL')                                           
-    
-    # get the list with the email ids
-    mail_ids = data[0]                                                              
-    id_list = mail_ids.split()                                                  
-    msg_list = []
+        # loop throw the emails
+        for num in id_list:                                                             
+            # get the mail and decode it
+            typ, data = mail.fetch(num, '(RFC822)')                                             
+            # TODO get the unread mails separately
+            # loop throw the parts of the message          
+            for response_part in data:                                                  
+                if isinstance(response_part, tuple):                                    
+                    # get the message data and decode it
+                    msg = email.message_from_string(response_part[1].decode("ISO-8859-1"))   
+                    # extract email subject
+                    email_subject = msg['subject']                                      
+                    # extract email sender
+                    email_from = msg['from']                                            
 
-    # loop throw the emails
-    for num in id_list:                                                             
-        # get the mail and decode it
-        typ, data = mail.fetch(num, '(RFC822)')                                             
-        # TODO get the unread mails separately
-        # loop throw the parts of the message          
-        for response_part in data:                                                  
-            if isinstance(response_part, tuple):                                    
-                # get the message data and decode it
-                msg = email.message_from_string(response_part[1].decode("ISO-8859-1"))   
-                # extract email subject
-                email_subject = msg['subject']                                      
-                # extract email sender
-                email_from = msg['from']                                            
-
-                # typ, data = mail.store(num,'-FLAGS', '\\Seen')
-                # output extracted Data to the console
-                print('From: ' + email_from + '\n')                                 
-                print('Subject: ' + email_subject + '\n')
-                print(msg.get_payload(decode=True))
+                    # typ, data = mail.store(num,'-FLAGS', '\\Seen')
+                    # output extracted Data to the console
+                    print('From: ' + email_from + '\n')                                 
+                    print('Subject: ' + email_subject + '\n')
+                    print(msg.get_payload(decode=True))
                 
-                # append the mail to a list with all the emails
-                msg_list.append((email_subject, email_from, msg.get_payload(decode=True))) 
-                # TODO for debug reasons we are only sending back one email, remove before deploy
-                return msg_list
+                    # append the mail to a list with all the emails
+                    msg_list.append((email_subject, email_from, msg.get_payload(decode=True))) 
+                    # TODO for debug reasons we are only sending back one email, remove before deploy
+                    return msg_list
                 
     return msg_list
 # to download attachments
