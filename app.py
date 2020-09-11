@@ -110,8 +110,15 @@ def register_user(client, message: Message):
     user.delete()
     message.reply_text('logued out') 
     
-@app.on_message(filters.command('logout'))
+@app.on_message(filters.command('help'))
+@app.on_message(filters.command('start'))
 def register_user(client, message: Message):
+    message.reply_text('''/register <email> <password> : register your email and password \n 
+                          /logout : if you are logued in, it removes your email and password from the database  
+                          /recieve : if you are registered this will send you your latest emails (unread)
+                          /send <email> <subject> <body> : send to <email> a mail with the subject <subject> and with <body> as the text
+                          /version : tells you the current vesion of the bot (debug purposes)  
+                       ''')
     
 if __name__ == '__main__':
     app.run()
