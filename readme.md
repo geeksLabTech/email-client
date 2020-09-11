@@ -9,19 +9,6 @@ using a telegram bot as interface
 ## Installation and Deployment
 
 
-### Docker Container
-
-The easiest method to deploy this software is using Docker,
-Make sure you have <a href='https://docs.docker.com'>installed</a> Docker on your machine.</br>
-
-Then run the following command to build the container
-
-`sudo docker build .`
-
-if this process ends with no errors you should be able to run the container 
-
-`sudo docker run <container name>`
-
 ### Manual Install and Deploy
 
 
@@ -54,38 +41,6 @@ And then install the requirements
 `pip install -r requirements.txt`
 
 Now you are Ready to Deploy
-
-#### Deploy to heroku manually
-
-##### First approach:
-You must to create an account on heroku and download heroku cli <a href='https://devcenter.heroku.com/articles/heroku-cli'>here</a>
-
-##### Install heroku cli
-
-Now, open a terminal and execute the following commands:
-
-`$ heroku login`
-
-`$ heroku create <name of your app>`
-
-`$ git add .`
-
-`$ git commit -m "first commit"`
-
-`$ git push heroku master`
-
-`$ heroku ps:scale web=1`
-
-`$ heroku open`
-
-##### Second approach:
-
-If you have a Github account you can simply add a new app from heroku dashboard
-and connect to your Github repo.
-Now you can do automatically o manually deploys without the cli :)
-
-If you need more information of how to deploy a python app on heroku refer to <a href='https://devcenter.heroku.com/articles/getting-started-with-python?singlepage=true'>this page</a>
-
 
 ### Email Servers Configuration
 
