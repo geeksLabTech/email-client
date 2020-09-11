@@ -71,7 +71,10 @@ def send_email(client,message: Message):
 
     to = texts[1]
     subject = texts[2]
-    body = texts[3]
+    
+    body = ''
+    for i in texts[3:]:
+        body = body+i+' '
     
     # send message and tell the user that the email is sent
     send_mail(username, password, to, subject, body)    
@@ -107,11 +110,8 @@ def register_user(client, message: Message):
     user.delete()
     message.reply_text('logued out') 
     
-    #userinfo['identifier'] = message.chat.id
-    #userinfo['email'] = f.encrypt(email.encode())
-    #userinfo['password'] = f.encrypt(password.encode())
-    
-    #result = table.insert_one(userinfo)
+@app.on_message(filters.command('logout'))
+def register_user(client, message: Message):
     
 if __name__ == '__main__':
     app.run()
