@@ -117,7 +117,7 @@ def send_email(client,message: Message):
                 ' Por favor reporte este error al equipo de desarrollo :)'
                 )  
             else: 
-                message.reply_text('Sent!')
+                message.reply_text('Enviado!')
     
 @app.on_message(filters.command('version'))
 def get_version(client, message: Message):
@@ -152,6 +152,8 @@ def register_user(client, message: Message):
             )
     
         user.save()
+        message.reply_text('Registrado correctamente!')
+        
     
     
 if __name__ == '__main__':
