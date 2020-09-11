@@ -142,3 +142,7 @@ to recieve unread emails just type:</br>
 ### Send
 to send an email type:</br>
 `/send <reciever email> <subject> <body>`
+
+### Logout
+Loguot and remove your data from the server
+`/logout`
