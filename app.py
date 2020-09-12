@@ -16,7 +16,7 @@ from cryptography.fernet import Fernet
 
 config_data = read_config('./config/config_bot.json')
 
-app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'])
+app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'], bot_token=config_data['bot_token'])
 create_db_connection('users_db')
 
 def get_fernet():
