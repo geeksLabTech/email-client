@@ -1,5 +1,9 @@
 *.session
 *.db
 *.key
-# config/config_bot.json
+# <<<<<<< HEAD
+# # config/config_bot.json
+# # config/config_email.json
+# =======
 # config/config_email.json
+# >>>>>>> a2dd33d5b005b8e77deb491aee3ea58842e48d31
