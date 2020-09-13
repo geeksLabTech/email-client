@@ -16,10 +16,10 @@ from cryptography.fernet import Fernet
 
 config_data = read_config('./config/config_bot.json')
 
-appl = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'], bot_token=config_data['bot_token'])
+app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'], bot_token=config_data['bot_token'])
 create_db_connection('users_db')
 
-app = appl.run
+# app = appl.run
 # app()
 
 def get_fernet():
@@ -29,7 +29,7 @@ def get_fernet():
     f = Fernet(key)
     return f
  
-@appl.on_message(filters.command('recieve'))
+@app.on_message(filters.command('recieve'))
 def recieve_emails(client, message: Message):
     
     message.reply_text('getting emails') 
@@ -68,7 +68,7 @@ def recieve_emails(client, message: Message):
 # then it asks for the email of the reciever
 # then the subject and finally the body of the email 
 
-@appl.on_message(filters.command('send'))
+@app.on_message(filters.command('send'))
 def send_email(client,message: Message):
     
     # extract identifier fromm message (chat_id)
@@ -122,11 +122,11 @@ def send_email(client,message: Message):
             else: 
                 message.reply_text('Enviado!')
     
-@appl.on_message(filters.command('version'))
+@app.on_message(filters.command('version'))
 def get_version(client, message: Message):
     message.reply_text('V-0.2') 
 
-@appl.on_message(filters.command('register'))
+@app.on_message(filters.command('register'))
 def register_user(client, message: Message):
     
     texts = message.text.split(" ")
@@ -157,14 +157,14 @@ def register_user(client, message: Message):
         user.save()
         message.reply_text('Registrado correctamente!')
         
-@appl.on_message(filters.command('logout'))
+@app.on_message(filters.command('logout'))
 def register_user(client, message: Message):
     user = UserDb.objects.get(chat_id=message.chat.id)
     user.delete()
     message.reply_text('logued out') 
     
-@appl.on_message(filters.command('help'))
-@appl.on_message(filters.command('start'))
+@app.on_message(filters.command('help'))
+@app.on_message(filters.command('start'))
 def register_user(client, message: Message):
     message.reply_text('''/register <email> <password> : register your email and password \n 
                           /logout : if you are logued in, it removes your email and password from the database  
@@ -178,4 +178,4 @@ def register_user(client, message: Message):
 #     app.run()
     
 
-print('test')
+def __ca
