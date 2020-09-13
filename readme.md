@@ -2,6 +2,7 @@
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FJavierOramas%2FTelegram-Mail&count_bg=%233D91C8&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 [![Build Status](https://img.shields.io/github/forks/Telegram-Mail/email-client.svg)](https://github.com/Telegram-Mail/email-client) [![Build Status](https://img.shields.io/github/stars/Telegram-Mail/email-client.svg)](https://github.com/Telegram-Mail/email-client) [![License](https://img.shields.io/github/license/Telegram-Mail/email-client.svg)](https://github.com/Telegram-Mail/email-client) [![Build Status](https://img.shields.io/travis/Telegram-Mail/email-client/master.svg)](https://travis-ci.org/Telegram-Mail/email-client)
 ![Build Status](https://img.shields.io/badge/Powered_by-pyrogram-orange?style=flat&logo=pyrogram)
+[![deepcode](https://www.deepcode.ai/api/gh/badge?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF0Zm9ybTEiOiJnaCIsIm93bmVyMSI6IlRlbGVncmFtLU1haWwiLCJyZXBvMSI6ImVtYWlsLWNsaWVudCIsImluY2x1ZGVMaW50IjpmYWxzZSwiYXV0aG9ySWQiOjIyNTkyLCJpYXQiOjE1OTk5NjUwNjZ9.CrCIXty0ZOuGRyz2GjF4llbCD6XQu1Z7p5dKTI05als)](https://www.deepcode.ai/app/gh/Telegram-Mail/email-client/_/dashboard?utm_content=gh%2FTelegram-Mail%2Femail-client)
 
 # Email Client 
 
