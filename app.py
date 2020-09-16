@@ -24,7 +24,7 @@ from cryptography.fernet import Fernet
 config_data = read_config('./config/config_bot.json')
 
 
-bot  = telebot.TeleBolt(config_data['bot_token'])
+bot  = telebot.TeleBolt(config_data['bot_token'], threaded=False)
 bot.set_webhook(config_data['URL'].format(secret), max_connections=1)
 bot.polling(none_stop=True)
 
