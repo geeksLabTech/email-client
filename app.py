@@ -1,4 +1,11 @@
 
+import telebot
+import datetime
+import json
+import flask
+from flask import Flask
+from flask import request
+
 from tools.errors import LoginException
 from pyrogram import Client, filters
 from pyrogram.methods import password
@@ -16,12 +23,27 @@ from cryptography.fernet import Fernet
 
 config_data = read_config('./config/config_bot.json')
 
-app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'], bot_token=config_data['bot_token'])
+
+bot  = telebot.TeleBolt(config_data['bot_token'])
+bot.set_webhook(config_data['URL'].format(secret), max_connections=1)
+bot.polling(none_stop=True)
+
+# app = Client(config_data['bot_user_name'], config_data['api_id'], config_data['api_hash'], bot_token=config_data['bot_token'])
 create_db_connection('users_db')
 
-# app = appl.run
-# app()
+app = Flask(__name__)
 
+@app.route(config_data['URL'], methods=['POST'])
+def webhook():
+    if request.headers.get('content-type') == 'application/json':
+        json_string = request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        bot.processs_new_updates([update])
+        return 'OK'
+    else:
+        flask.abort(403)
+        flask.abort(403)
+    
 def get_fernet():
     key = ''
     with open('./config/encrypt.key', 'r') as f:
@@ -29,17 +51,18 @@ def get_fernet():
     f = Fernet(key)
     return f
  
-@app.on_message(filters.command('recieve'))
+# @app.on_message(filters.command('recieve'))
+@bot.message_handler(command=['recieve'])
 def recieve_emails(client, message: Message):
     
-    message.reply_text('getting emails') 
+    bot.reply_to(message, ('getting emails') 
     
     f = get_fernet()
     
     try:
         user = UserDb.objects.get(chat_id=message.chat.id)
     except DoesNotExist:
-        message.reply_text(
+        bot.reply_to(message, (
             '''
             Debe registrarse primero, por favor
             use el comando /register y escriba
@@ -54,28 +77,29 @@ def recieve_emails(client, message: Message):
         try:
             emails = recieve_mail(username, password)
         except LoginException:
-            message.reply_text('Error al loguearse, quizas deba cambiar su usuario o contraseña')
+            bot.reply_to(message, ('Error al loguearse, quizas deba cambiar su usuario o contraseña')
         except Exception as e:
-            message.reply_text(str(e) + 
+            bot.reply_to(message, (str(e) + 
             ' Por favor reporte este error al equipo de desarrollo :)'
             )
         else:
             for i in emails:
-                message.reply_text(i)
+                bot.reply_to(message, (i)
 
 # TODO make this (send) to work with diferent messages, 
 # /send triggers the action and 
 # then it asks for the email of the reciever
 # then the subject and finally the body of the email 
 
-@app.on_message(filters.command('send'))
+# @app.on_message(filters.command('send'))
+@bot.message_handler(command=['send'])
 def send_email(client,message: Message):
     
     # extract identifier fromm message (chat_id)
     try:
         user = UserDb.objects.get(chat_id=message.chat.id)
     except DoesNotExist:
-        message.reply_text(
+        bot.reply_to(message, (
             '''
             Debe registrarse primero, por favor
             use el comando /register y escriba
@@ -94,7 +118,7 @@ def send_email(client,message: Message):
         # get reciever email, subject and text for the email
         texts = message.text.split(" ")
         if(len(texts) < 3):
-            message.reply_text(
+            bot.reply_to(message, (
                 '''
                 La estructura debe ser la siguiente:
                     *Destinatario
@@ -114,24 +138,26 @@ def send_email(client,message: Message):
             try:
                 send_mail(username, password, to, subject, body)  
             except LoginException:
-                message.reply_text('Error al loguearse, quizas deba cambiar su usuario o contraseña')
+                bot.reply_to(message, ('Error al loguearse, quizas deba cambiar su usuario o contraseña')
             except Exception as e:
-                message.reply_text(str(e) + 
+                bot.reply_to(message, (str(e) + 
                 ' Por favor reporte este error al equipo de desarrollo :)'
                 )  
             else: 
-                message.reply_text('Enviado!')
+                bot.reply_to(message, ('Enviado!')
     
-@app.on_message(filters.command('version'))
+# @app.on_message(filters.command('version'))
+@bot.message_handler(command=['version'])
 def get_version(client, message: Message):
-    message.reply_text('V-0.2') 
+    bot.reply_to(message, ('V-0.2.1') 
 
-@app.on_message(filters.command('register'))
+# @app.on_message(filters.command('register'))
+@bot.message_handler(command=['register'])
 def register_user(client, message: Message):
     
     texts = message.text.split(" ")
     if(len(texts) != 3):
-        message.reply_text('Debe Introducir los campos usuario y contraseña separados por un espacio')
+        bot.reply_to(message, ('Debe Introducir los campos usuario y contraseña separados por un espacio')
     
     else:
         username = texts[1]
@@ -155,18 +181,20 @@ def register_user(client, message: Message):
             )
     
         user.save()
-        message.reply_text('Registrado correctamente!')
+        bot.reply_to(message, ('Registrado correctamente!')
         
-@app.on_message(filters.command('logout'))
+# @app.on_message(filters.command('logout'))
+@bot.message_handler(command=['logout'])
 def register_user(client, message: Message):
     user = UserDb.objects.get(chat_id=message.chat.id)
     user.delete()
-    message.reply_text('logued out') 
+    bot.reply_to(message, ('logued out') 
     
-@app.on_message(filters.command('help'))
-@app.on_message(filters.command('start'))
-def register_user(client, message: Message):
-    message.reply_text('''/register <email> <password> : register your email and password \n 
+# @app.on_message(filters.command('help'))
+# @app.on_message(filters.command('start'))
+@bot.message_handler(command=['start', 'help'])
+def register_user(message: Message):
+    bot.reply_to(message, ('''/register <email> <password> : register your email and password \n 
                           /logout : if you are logued in, it removes your email and password from the database  
                           /recieve : if you are registered this will send you your latest emails (unread)
                           /send <email> <subject> <body> : send to <email> a mail with the subject <subject> and with <body> as the text
