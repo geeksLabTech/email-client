@@ -1,1 +1,1 @@
-worker: python app.py
+web: sh setup.sh

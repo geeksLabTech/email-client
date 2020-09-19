@@ -174,8 +174,6 @@ def register_user(client, message: Message):
                        ''')
     
     
-# if __name__ == '__main__':
-#     app.run()
+if __name__ == '__main__':
+    app.run()
     
-
-def __ca
