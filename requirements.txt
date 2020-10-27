@@ -1,7 +1,7 @@
 mongoengine==0.20.0
 flake8==3.8.3
 Pyrogram==1.0.7
-cryptography==2.7
+cryptography==3.2
 coverage==5.2.1
 pymongo==3.11.0
 typer==0.3.2
