@@ -1,6 +1,6 @@
-FROM ubuntu
+FROM Ubuntu
+FROM Python:3.7
 
-RUN apt-get update && apt-get -y python3
 RUN python3 -m pip install --upgrade pip
 RUN pip install -r requirements.txt
 
